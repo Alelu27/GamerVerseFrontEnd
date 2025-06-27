@@ -181,7 +181,8 @@ function MejorValorados() {
                     juego={juegoSeleccionado}
                     show={mostrarModal}
                     onHide={cerrarModal}
-                    onAddComment={agregarComentario}
+                    onAddComment={agregarComentario} 
+                    usuarioId={1}                //provisional
                 />
             )}
             <div>

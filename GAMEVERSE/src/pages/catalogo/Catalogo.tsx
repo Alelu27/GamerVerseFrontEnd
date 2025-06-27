@@ -294,11 +294,12 @@ function Catalogo() {
 
       {juegoSeleccionado && (
         <DetalleJuego
-          juego={juegoSeleccionado}
-          show={mostrarModalDetalle}
-          onHide={() => setMostrarModalDetalle(false)}
-          onAddComment={handleAgregarComentario}
-        />
+                  juego={juegoSeleccionado}
+                  show={mostrarModalDetalle}
+                  onHide={() => setMostrarModalDetalle(false)}
+                  onAddComment={handleAgregarComentario} 
+                  usuarioId={1}  //provisional      
+        />
       )}
       <BarraCarrito />
       <Footer />

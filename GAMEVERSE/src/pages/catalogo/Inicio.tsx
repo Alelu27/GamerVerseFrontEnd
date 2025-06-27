@@ -254,12 +254,14 @@ const Inicio = () => {
       </div>
 
       
+      {/* Modal de detalles del juego */}
       {juegoSeleccionado && (
         <DetalleJuego
           juego={juegoSeleccionado}
           show={mostrarModal}
           onHide={cerrarModal}
-          onAddComment={agregarComentario}
+          onAddComment={agregarComentario} 
+          usuarioId={1}                   //provisional
         />
       )}
       <BarraCarrito />

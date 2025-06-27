@@ -652,15 +652,36 @@ interface DetalleJuegoProps {
   show: boolean;
   onHide: () => void;
   onAddComment: (juegoId: number, comentario: Omit<Comentario, 'id' | 'date'>) => void;
+  usuarioId: number;
 }
 
-// Componente principal
-function DetalleJuego({ juego, show, onHide, onAddComment }: DetalleJuegoProps) {
+interface Usuario {
+  id: number;
+  juegosComprados: number[];
+}
+
+// Lista de usuarios con los juegos que han comprado
+const usuarios: Usuario[] = [
+  { id: 1, juegosComprados: [1, 3, 5] },
+  { id: 2, juegosComprados: [2, 4] },
+  { id: 3, juegosComprados: [6, 7, 8] }
+];
+
+// Función para comprobar si el usuario ha comprado el juego
+const hasPurchased = (usuarioId: number, juegoId: number): boolean => {
+  const user = usuarios.find(u => u.id === usuarioId);
+  return user ? user.juegosComprados.includes(juegoId) : false;
+};
+
+function DetalleJuego({ juego, show, onHide, onAddComment, usuarioId }: DetalleJuegoProps) {
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [nuevoComentario, setNuevoComentario] = useState('');
   const [usuarioRating, setUsuarioRating] = useState(5);
 
   if (!juego) return null;
+  
+  const isPurchased = hasPurchased(usuarioId, juego.id);
+
 
   const handleRatingClick = (rating: number) => {
     setUsuarioRating(rating);
@@ -736,8 +757,8 @@ function DetalleJuego({ juego, show, onHide, onAddComment }: DetalleJuegoProps) 
             <p className="custom-description-text">{juego.descripcionLarga}</p>
 
             <div className="mb-3">
-            <h6 className="custom-release-date-title">Fecha de lanzamiento</h6>
-            <p className="custom-release-date-text">{juego.lanzamiento}</p>
+              <h6 className="custom-release-date-title">Fecha de lanzamiento</h6>
+              <p className="custom-release-date-text">{juego.lanzamiento}</p>
             </div>
 
             <div className="mb-3">
@@ -776,15 +797,16 @@ function DetalleJuego({ juego, show, onHide, onAddComment }: DetalleJuegoProps) 
                   </small>
                 )}
               </div>
+              {/* Condición de compra: si no está comprado, se muestra "Agregar al carrito", si está comprado, se muestra "Jugar ahora" */}
               <button
                 className="btn btn-sm btn-primary"
                 data-id={juego.id}
                 data-nombre={juego.nombre}
                 data-precio={juego.precio.toFixed(2)}
                 data-imagen={juego.imagen}
-                onClick={handleAgregarAlCarrito}
-                >
-                Agregar al carrito
+                onClick={isPurchased ? () => window.location.href = '/GameVerse/jugar' : handleAgregarAlCarrito} // Redirige a la ruta de "Jugar" si está comprado
+              >
+                {isPurchased ? 'Jugar ahora' : 'Agregar al carrito'}
               </button>
             </div>
           </div>
@@ -815,8 +837,8 @@ function DetalleJuego({ juego, show, onHide, onAddComment }: DetalleJuegoProps) 
             </div>
           ))}
           
-          {/* Añadir reseña */}
-          {(
+          {/* Añadir reseña solo si está comprado */}
+          {isPurchased && (
             <div className="mt-4 custom-add-review">
               <h5 className="custom-reviews-title">Añadir tu reseña</h5>
               <div className="mb-3">
