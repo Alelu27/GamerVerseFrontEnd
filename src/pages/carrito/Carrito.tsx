@@ -5,7 +5,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import '../../css/Carrito.css';
 import type { CarritoItem } from '../carrito/DetalleCarrito'; 
 import { imagenes } from '../carrito/DetalleCarrito';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import CarroVacio from '../../imagenes/CarroVacio.png';
 import BarraNav from '../catalogo/BarraNavUser';

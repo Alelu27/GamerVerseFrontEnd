@@ -1,8 +1,6 @@
-import BarraCarrito from "../carrito/BarraCarrito";
-import { handleAgregarAlCarrito } from "../carrito/DetalleCarrito";
 import { useState, useEffect, useRef } from "react";
 import type { ChangeEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom"; // Importamos useLocation
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -52,6 +50,9 @@ function BarraNav() {
   const [mostrarResultadosBusqueda, setMostrarResultadosBusqueda] =
     useState(false);
   const [mostrarModal, setMostrarModal] = useState(false);
+
+  const location = useLocation();
+  const esPaginaCatalogo = location.pathname === "/Catalogo"; // True si estás en /Catalogo
 
   const abrirModal = (juegoId: number) => {
     const juegoCompleto = productosIniciales.find((p) => p.id === juegoId);
@@ -125,6 +126,11 @@ function BarraNav() {
     setJuegosFiltrados(nuevosJuegosFiltrados);
   };
 
+  const alternarFiltroLateral = () => {
+    console.log("Alternar filtro lateral (función placeholder)");
+    // Aquí iría la lógica para mostrar/ocultar tu filtro lateral
+  };
+
   const manejarCambioNombre = (evento: ChangeEvent<HTMLInputElement>) => {
     const nuevoNombre = evento.target.value;
     setNombreBusqueda(nuevoNombre);
@@ -169,24 +175,30 @@ function BarraNav() {
           </Link>
 
           {/* Barra de búsqueda */}
-          <form
-            className="d-flex mx-auto position-relative"
-            id="barraBusquedaContainer"
-          >
+          {/* El width del form lo puedes ajustar con clases de Bootstrap como w-50 o en tu CSS si prefieres un valor fijo */}
+          <form className="d-flex mx-auto position-relative" id="barraBusquedaContainer" style={{ width: '50%' }}>
+            {/* INICIO DE LA MODIFICACIÓN PARA EL BOTÓN DE FILTRO */}
+            <button
+              className="btn btn-outline-light me-2"
+              type="button"
+              onClick={alternarFiltroLateral}
+              style={{ visibility: esPaginaCatalogo ? 'visible' : 'hidden' }} // <-- EL CAMBIO CLAVE AQUÍ
+            >
+              <i className="bi bi-sliders"></i>
+            </button>
+            {/* FIN DE LA MODIFICACIÓN */}
+
             <input
               ref={referenciaBusqueda}
-              className="form-control me-2"
+              className="form-control me-4"
               type="search"
               placeholder="Buscar juegos..."
               aria-label="Buscar"
               value={nombreBusqueda}
               onChange={manejarCambioNombre}
             />
-            <button
-              className="btn btn-outline-light"
-              type="button"
-              onClick={manejarClickBuscar}
-            >
+            {/* El botón "Buscar" (de la derecha) NO se oculta */}
+            <button className="btn btn-outline-light" type="button" onClick={manejarClickBuscar}>
               Buscar
             </button>
 
